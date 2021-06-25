@@ -150,6 +150,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (require 'init-scroll)
 
 ;; General Programming
+(require 'init-evil)
+
 (require 'init-magit)
 
 (require 'init-projectile)
