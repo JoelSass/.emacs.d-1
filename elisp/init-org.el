@@ -46,8 +46,8 @@
                              ("C-c ;" . nil))))
   :custom
   (org-log-done 'time)
-  (calendar-latitude 43.65107) ;; Prerequisite: set it to your location, currently default: Toronto, Canada
-  (calendar-longitude -79.347015) ;; Usable for M-x `sunrise-sunset' or in `org-agenda'
+  (calendar-latitude 53.551086) ;; Prerequisite: set it to your location, currently default: Hamburg, Germany
+  (calendar-longitude  9.993682) ;; Usable for M-x `sunrise-sunset' or in `org-agenda'
   (org-export-backends (quote (ascii html icalendar latex md odt)))
   (org-use-speed-commands t)
   (org-confirm-babel-evaluate 'nil)
@@ -66,8 +66,6 @@
   (add-to-list 'org-latex-packages-alist '("" "listings"))
   (unless (version< org-version "9.2")
     (require 'org-tempo))
-  (when (file-directory-p "~/org/agenda/")
-    (setq org-agenda-files (list "~/org/agenda/")))
 
   (defun org-export-toggle-syntax-highlight ()
     "Setup variables to turn on syntax highlighting when calling `org-latex-export-to-pdf'."
@@ -79,7 +77,85 @@
     "Insert a #+attr_latex to the current buffer, default the align to |c|c|c|, adjust if necessary."
     (interactive)
     (insert "#+attr_latex: :align |c|c|c|")))
+
+(setq org-agenda-files '("~/MEGA/tasks.org"))
+(setq org-image-actual-width '(600))
+(setq org-startup-with-inline-images t)
+(setq org-hide-emphasis-markers t)
+(use-package org-download)
+
+(require 'org-habit)
+(add-to-list 'org-modules 'org-habit)
+(setq org-habit-graph-column 60)
+(setq org-habit-show-all-today t)
+
+(setq org-agenda-start-with-log-mode t)
+(setq org-log-done 'time)
+(setq org-log-into-drawer t)
+
 ;; -OrgPac
+
+;;roam-Pac
+(setq org-roam-dailies-directory "~/MEGA/org-roam/daily/")
+
+(use-package org-roam
+  :diminish
+:hook
+(after-init . org-roam-mode)
+:custom
+(org-roam-directory "~/MEGA/org-roam/")
+:bind (:map org-roam-mode-map
+(("C-c n l" . org-roam)
+ ("C-c n f" . org-roam-find-file)
+ ("C-c n g" . org-roam-graph))
+:map org-mode-map
+(("C-c n i" . org-roam-insert))
+(("C-c n I" . org-roam-insert-immediate))))
+
+(setq org-roam-dailies-capture-templates
+  `(("d" "default" entry (function org-roam-capture--get-point)
+     "* %?"
+     :file-name ,(concat org-roam-dailies-directory "%<%Y-%m-%d>")
+     :head "#+title: %<%Y-%m-%d>\n
+[[file:../daily.org][Daily]]
+* Diary")))
+
+(setq org-roam-capture-templates
+'(("d" "default" plain (function org-roam-capture--get-point)
+"%?"
+:file-name "${slug}"
+:head "#+TITLE: ${title}
+#+startup: latexpreview showall
+
+#+ROAM_ALIAS:
+#+CREATED: %u
+
+- tags ::
+\n* ${title}
+* Siehe Auch
+* Quellen
+"
+:unnarrowed t
+:immediate-finish t)))
+;; -RoamPac
+
+;; UIPac
+(use-package org-superstar
+  :diminish
+:init
+(setq org-superstar-headline-bullets-list
+'("" "" "" "" "" ""))
+:config
+(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+
+(custom-set-faces
+'(org-level-1 ((t (:height 2.0 :foreground "#a71d31"))))
+'(org-level-2 ((t (:height 1.5 :foreground "#8D6B94"))))
+'(org-level-3 ((t (:height 1.25 ))))
+'(org-level-4 ((t (:height 1.15 ))))
+'(org-level-5 ((t (:height 1.05 ))))
+)
+;; -UIPac
 
 ;; TocOrgPac
 (use-package toc-org
@@ -103,9 +179,12 @@
   (org-babel-do-load-languages
    'org-babel-load-languages
    '(;; other Babel languages
+     (dot      . t)
      (plantuml . t))))
 ;; -PlantUMLPac
 
+
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.6))
 (provide 'init-org)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-org.el ends here
