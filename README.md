@@ -213,9 +213,7 @@ Some heartwarming responses from the Emacs community:
 2.  Clone this repo to `HOME` or `~/` path using [git](https://git-scm.com/) and update all the submodules.
 
     ```bash
-    cd ~
-    git clone --recurse-submodules -j8 https://github.com/MatthewZMD/.emacs.d.git
-    cd .emacs.d
+    git clone --recurse-submodules -j8 https://github.com/JoelSass/.emacs.d-1.git ~/.emacs.d
     ```
 3.  Ensure a stable connection to Melpa Packages, then open Emacs.
 4.  Enter `y` when prompted with `Auto-update packages now?`, wait for all packages to install.

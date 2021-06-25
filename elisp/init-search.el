@@ -68,6 +68,18 @@
       "Go to the $HOME of the local machine."
       (interactive)
     (ivy--cd "~/")))
+
+(use-package ivy-prescient
+  :after counsel
+  :config
+  (ivy-prescient-mode 1))
+
+(use-package company-prescient
+  :after company
+  :config
+  (company-prescient-mode 1))
+
+(prescient-persist-mode 1)
 ;; -IvyPac
 
 ;; ColorRGPac
